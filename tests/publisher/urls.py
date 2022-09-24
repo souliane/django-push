@@ -1,11 +1,11 @@
-from django.conf.urls import url, include
+from django.urls import include, path, re_path
 
 from .feeds import HubFeed, OverrideHubFeed, DynamicHubFeed
 
 
 urlpatterns = [
-    url(r'^feed/$', HubFeed(), name='feed'),
-    url(r'^override-feed/$', OverrideHubFeed(), name='override-feed'),
-    url(r'^dynamic-feed/$', DynamicHubFeed(), name='dynamic-feed'),
-    url(r'^subscriber/', include('django_push.subscriber.urls')),
+    path('feed/', HubFeed(), name='feed'),
+    path('override-feed/', OverrideHubFeed(), name='override-feed'),
+    path('dynamic-feed/', DynamicHubFeed(), name='dynamic-feed'),
+    re_path(r'^subscriber/', include('django_push.subscriber.urls')),
 ]

@@ -71,7 +71,7 @@ class CallbackView(generic.View):
         subscription = get_object_or_404(Subscription, pk=pk)
 
         if subscription.secret:
-            signature = request.META.get('HTTP_X_HUB_SIGNATURE', None)
+            signature = request.headers.get('X-Hub-Signature', None)
             if signature is None:
                 logger.debug("Ignoring payload for subscription {0}, missing "
                              "signature".format(subscription.pk))
@@ -90,7 +90,7 @@ class CallbackView(generic.View):
 
         self.links = None
         if 'HTTP_LINK' in request.META:
-            self.links = parse_header_links(request.META['HTTP_LINK'])
+            self.links = parse_header_links(request.headers['Link'])
         updated.send(sender=subscription, notification=request.body,
                      request=request, links=self.links)
         self.subscription = subscription
